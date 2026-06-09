@@ -278,6 +278,12 @@ return {
           filetypes = { "yaml.docker-compose" },
           root_markers = { "docker-compose.yaml", "docker-compose.yml", "compose.yaml", "compose.yml" },
         },
+
+        -- -- Odin LSP
+        ols = {
+          cmd = { "ols" },
+          filetypes = { "odin" },
+        },
       }
 
       local servers_to_install = vim.tbl_filter(function(key)
@@ -292,9 +298,10 @@ return {
       require("mason").setup({ ui = { border = "rounded" } })
 
       local ensure_installed = {
-        "stylua",
-        "lua_ls",
         "delve",
+        "lua_ls",
+        "ols",
+        "stylua",
         -- "tailwind-language-server",
       }
 

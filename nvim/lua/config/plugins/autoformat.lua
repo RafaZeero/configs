@@ -51,6 +51,7 @@ return {
         typescriptreact = { "prettier" },
         c = { "clang-format" },
         cpp = { "clang-format" },
+        odin = { "ols" },
       },
     },
   },
