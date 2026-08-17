@@ -157,7 +157,21 @@ return {
 
         -- Enabled biome formatting, turn off all the other ones generally
         eslint = {},
-        ts_ls = {},
+        ts_ls = {
+          -- `vue_ls` roda em hybrid mode e delega TS ao `ts_ls`, entao ele precisa
+          -- anexar em `.vue` com o plugin do Vue carregado.
+          init_options = {
+            plugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = vim.fn.stdpath("data")
+                  .. "/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin",
+                languages = { "vue" },
+              },
+            },
+          },
+          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+        },
         -- denols = true,
         jsonls = {
           filetypes = { "json", "jsonc", "jsonl" },
@@ -284,7 +298,25 @@ return {
           cmd = { "ols" },
           filetypes = { "odin" },
         },
+
+        vue_ls = {},
       }
+
+      -- `vue_ls` so existe no formato novo do nvim-lspconfig (`lsp/vue_ls.lua`),
+      -- que este Neovim (0.11.0-dev) ainda nao resolve sozinho. Sem isto,
+      -- `lspconfig.vue_ls.setup()` vira um no-op silencioso.
+      do
+        local file = vim.api.nvim_get_runtime_file("lsp/vue_ls.lua", false)[1]
+        local ok, def = pcall(dofile, file or "")
+        if ok and type(def) == "table" then
+          local markers = def.root_markers or { "package.json" }
+          def.root_markers = nil
+          def.root_dir = require("lspconfig.util").root_pattern(unpack(markers))
+          require("lspconfig.configs").vue_ls = { default_config = def }
+        else
+          vim.notify("[lsp] lsp/vue_ls.lua nao encontrado", vim.log.levels.WARN)
+        end
+      end
 
       local servers_to_install = vim.tbl_filter(function(key)
         local t = servers[key]
