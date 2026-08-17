@@ -101,7 +101,7 @@ alias bat='batcat'
 alias cursor='~/bin/cursor.AppImage --no-sandbox'
 
 # Personal Data
-alias me='echo 55788697000107'
+alias cnpj='echo 55788697000107'
 
 # Golang
 alias sqlc='/home/zeero/go/bin/./sqlc'
@@ -184,3 +184,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # odin
 export ODINPATH="$HOME/odin"
 export PATH="$ODINPATH:$PATH"
+
+# kimi-code
+export PATH="/home/zeero/.kimi-code/bin:$PATH"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /home/zeero/.local/bin/terraform terraform
